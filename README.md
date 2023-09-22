@@ -17,6 +17,9 @@ This project utilizes an ESP8266 microcontroller to control LEDs connected to th
 **Step-by-Step Project Development:**
 
 1. **Hardware Assembly:**
+
+![Wiring ESP8266](https://github.com/SentryCoderDev/ESP8266-FingersUP/assets/134494889/32c3e4df-fe3d-4b8e-a9a1-5b2c9de7c841)
+
    - Create a circuit to connect the ESP8266 and LEDs. For example, you can connect each LED to a GPIO pin.
    - Connect the camera module to the ESP8266 and provide the necessary power supply.
 
@@ -31,18 +34,20 @@ This project utilizes an ESP8266 microcontroller to control LEDs connected to th
    - Capture video feed from the camera and process it using OpenCV. Utilize OpenCV's image processing capabilities to detect hand gestures.
 
 5. **Gesture Recognition:**
+
+![05f9f8f2-cd5f-4521-b1fd-177fb90cb681](https://github.com/SentryCoderDev/ESP8266-FingersUP/assets/134494889/8033e7d5-19f8-4d37-bc36-8829dfc01852)
    - Develop an algorithm to recognize hand gestures using OpenCV. For example, you can employ a color-based tracking algorithm to detect your hand, or track its movement.
 
-6. **LED Control:**
+7. **LED Control:**
    - When hand gestures are detected, send commands to the ESP8266 to turn the LEDs on or off. You can achieve this using MQTT or HTTP protocols.
 
-7. **User Interface (Optional):**
+8. **User Interface (Optional):**
    - Create a mobile app or web interface to allow users to remotely control the LEDs. This interface can send commands to the ESP8266 based on user interactions.
 
-8. **Testing and Fine-tuning:**
+9. **Testing and Fine-tuning:**
    - Test the project and optimize it by adjusting the algorithm and making necessary corrections.
 
-9. **Conclusion:**
+10. **Conclusion:**
    - With the completed project, you'll be able to control IoT-connected LEDs through hand gestures, such as showing or moving your hand, triggering IoT functions like turning on or off the LEDs.
 
 There are plenty of opportunities to enhance and expand this project. You could add different LED effects for various hand gestures or integrate your project into a more complex IoT network.
