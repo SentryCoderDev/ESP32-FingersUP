@@ -24,30 +24,32 @@ This project utilizes an ESP8266 microcontroller to control LEDs connected to th
    - Connect the camera module to the ESP8266 and provide the necessary power supply.
 
 2. **ESP8266 Programming:**
-   - Write a program for the ESP8266 using an Arduino-compatible environment like Arduino IDE or PlatformIO. This program should establish a WiFi connection and control the LEDs using IoT protocols such as MQTT or HTTP.
+- Write a program for the ESP8266 using an Arduino-compatible environment like Arduino IDE or PlatformIO. This program should establish a WiFi connection and control the LEDs using IoT protocols such as MQTT or HTTP.
 
 3. **Camera Integration:**
-   - Set up the camera module to communicate with the ESP8266. You may use communication protocols like SPI or I2C. But ı used my laptop webcam with wifi
+- Set up the camera module to communicate with the ESP8266. You may use communication protocols like SPI or I2C. But ı used my laptop webcam with wifi
 
 4. **Using OpenCV:**
-   - Compile and install the OpenCV library for the ESP8266.
-   - Capture video feed from the camera and process it using OpenCV. Utilize OpenCV's image processing capabilities to detect hand gestures.
+- Compile and install the OpenCV library for the ESP8266.
+- Capture video feed from the camera and process it using OpenCV. Utilize OpenCV's image processing capabilities to detect hand gestures.
 
 5. **Gesture Recognition:**
 
 ![05f9f8f2-cd5f-4521-b1fd-177fb90cb681](https://github.com/SentryCoderDev/ESP8266-FingersUP/assets/134494889/8033e7d5-19f8-4d37-bc36-8829dfc01852)
-   - Develop an algorithm to recognize hand gestures using OpenCV. For example, you can employ a color-based tracking algorithm to detect your hand, or track its movement.
+- Develop an algorithm to recognize hand gestures using OpenCV. For example, you can employ a color-based tracking algorithm to detect your hand, or track its movement.
 
 7. **LED Control:**
-   - When hand gestures are detected, send commands to the ESP8266 to turn the LEDs on or off. You can achieve this using MQTT or HTTP protocols.
+- When hand gestures are detected, send commands to the ESP8266 to turn the LEDs on or off. You can achieve this using MQTT or HTTP protocols.
 
 8. **User Interface (Optional):**
-   - Create a mobile app or web interface to allow users to remotely control the LEDs. This interface can send commands to the ESP8266 based on user interactions.
+- Create a mobile app or web interface to allow users to remotely control the LEDs. This interface can send commands to the ESP8266 based on user interactions.
 
 9. **Testing and Fine-tuning:**
-   - Test the project and optimize it by adjusting the algorithm and making necessary corrections.
+- Test the project and optimize it by adjusting the algorithm and making necessary corrections.
 
 10. **Conclusion:**
-   - With the completed project, you'll be able to control IoT-connected LEDs through hand gestures, such as showing or moving your hand, triggering IoT functions like turning on or off the LEDs.
+- With the completed project, you'll be able to control IoT-connected LEDs through hand gestures, such as showing or moving your hand, triggering IoT functions like turning on or off the LEDs.
 
-There are plenty of opportunities to enhance and expand this project. You could add different LED effects for various hand gestures or integrate your project into a more complex IoT network.
+11. **Expanding and Enhancing the Project:**
+- There are numerous opportunities to expand and enhance this project. You can add different LED effects for various hand gestures or integrate your project into a more complex IoT network.
+- Additionally, don't forget to update the WiFi name, WiFi password, and subscriber name in Arduino. The subscriber name must remain the same.
