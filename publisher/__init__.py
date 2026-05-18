@@ -1,3 +1,1 @@
-"""Publisher package - modularized version of original Publisher.py"""
-
-__all__ = ["main"]
+"""FingersUP Smart Home - Publisher Package"""
