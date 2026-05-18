@@ -1,4 +1,6 @@
 opencv-python
-cvzone
+opencv-contrib-python
 mediapipe
+cvzone
 paho-mqtt
+numpy
