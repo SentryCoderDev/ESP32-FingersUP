@@ -1,0 +1,177 @@
+{
+  "version": 1,
+  "author": "Antigravity",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "wokwi-esp32",
+      "id": "esp",
+      "top": -48,
+      "left": -9.5,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led_red",
+      "top": -150,
+      "left": 140,
+      "attrs": {
+        "color": "red"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led_green",
+      "top": -100,
+      "left": 140,
+      "attrs": {
+        "color": "green"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led_blue",
+      "top": -50,
+      "left": 140,
+      "attrs": {
+        "color": "blue"
+      }
+    },
+    {
+      "type": "wokwi-servo",
+      "id": "servo1",
+      "top": 120,
+      "left": 160,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-buzzer",
+      "id": "buzzer1",
+      "top": 180,
+      "left": -120,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-photoresistor",
+      "id": "ldr1",
+      "top": -180,
+      "left": -100,
+      "attrs": {}
+    }
+  ],
+  "connections": [
+    [
+      "esp:GND.1",
+      "led_red:C",
+      "black",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "esp:GND.1",
+      "led_green:C",
+      "black",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "esp:GND.1",
+      "led_blue:C",
+      "black",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "esp:12",
+      "led_red:A",
+      "red",
+      [
+        "h0"
+      ]
+    ],
+    [
+      "esp:14",
+      "led_green:A",
+      "green",
+      [
+        "h0"
+      ]
+    ],
+    [
+      "esp:27",
+      "led_blue:A",
+      "blue",
+      [
+        "h0"
+      ]
+    ],
+    [
+      "esp:GND.2",
+      "servo1:GND",
+      "black",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "esp:5V",
+      "servo1:V+",
+      "red",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "esp:18",
+      "servo1:PWM",
+      "orange",
+      [
+        "h0"
+      ]
+    ],
+    [
+      "esp:GND.3",
+      "buzzer1:2",
+      "black",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "esp:19",
+      "buzzer1:1",
+      "purple",
+      [
+        "h0"
+      ]
+    ],
+    [
+      "esp:3V3",
+      "ldr1:VCC",
+      "red",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "esp:GND.1",
+      "ldr1:GND",
+      "black",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "esp:34",
+      "ldr1:AO",
+      "green",
+      [
+        "h0"
+      ]
+    ]
+  ],
+  "dependencies": {}
+}
