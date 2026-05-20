@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FingersUP - Akilli Ev Kontrol</title>
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>FingersUP Akilli Ev</h1>
+            <div class="status-bar">
+                <span id="connStatus" class="badge offline">BAGLANMADI</span>
+                <span id="faceStatus" class="badge">Yuz: -</span>
+            </div>
+        </header>
+
+        <div class="grid">
+            <!-- LED Kontrol -->
+            <div class="card">
+                <h2>LED Kontrol</h2>
+                <div class="led-group">
+                    <button class="led-btn red" data-led="kirmizi" onclick="toggleLED('kirmizi')">Kirmizi</button>
+                    <button class="led-btn green" data-led="yesil" onclick="toggleLED('yesil')">Yesil</button>
+                    <button class="led-btn blue" data-led="mavi" onclick="toggleLED('mavi')">Mavi</button>
+                </div>
+                <div class="led-status">
+                    <span id="ledKirmizi" class="led-indicator off">R</span>
+                    <span id="ledYesil" class="led-indicator off">G</span>
+                    <span id="ledMavi" class="led-indicator off">B</span>
+                </div>
+            </div>
+
+            <!-- Sensorler -->
+            <div class="card">
+                <h2>Sensorler</h2>
+                <div class="sensor">
+                    <label>Sicaklik:</label>
+                    <span id="sicaklik">--</span>
+                </div>
+                <div class="sensor">
+                    <label>Isik (LDR):</label>
+                    <span id="isik">--</span>
+                </div>
+                <div class="sensor">
+                    <label>Kapi Mesafe:</label>
+                    <span id="mesafe">--</span>
+                </div>
+                <div class="sensor">
+                    <label>IR:</label>
+                    <span id="irDurum">--</span>
+                </div>
+            </div>
+
+            <!-- Servo Kontrol -->
+            <div class="card">
+                <h2>Servo Motor</h2>
+                <div class="servo-control">
+                    <input type="range" id="servoSlider" min="0" max="180" value="90"
+                           oninput="servoControl(this.value)">
+                    <span id="servoAci">90°</span>
+                </div>
+                <div class="servo-presets">
+                    <button onclick="servoPreset(0)">0°</button>
+                    <button onclick="servoPreset(45)">45°</button>
+                    <button onclick="servoPreset(90)">90°</button>
+                    <button onclick="servoPreset(135)">135°</button>
+                    <button onclick="servoPreset(180)">180°</button>
+                </div>
+            </div>
+
+            <!-- Sistem -->
+            <div class="card">
+                <h2>Sistem</h2>
+                <div class="sys-controls">
+                    <button class="sys-btn" onclick="sendCommand('SISTEM_DURUM')">Durum Bilgisi</button>
+                    <button class="sys-btn danger" onclick="sendCommand('ALARM_AC')">Alarm Ac</button>
+                    <button class="sys-btn" onclick="sendCommand('ALARM_KAPA')">Alarm Kapa</button>
+                    <button class="sys-btn danger" onclick="sendCommand('BUZZER_TEST')">Buzzer Test</button>
+                    <button class="sys-btn" onclick="sendCommand('YENIDEN_BASLAT')">Yeniden Baslat</button>
+                </div>
+            </div>
+
+            <!-- Son Komut -->
+            <div class="card full-width">
+                <h2>Son Komutlar</h2>
+                <div id="logArea" class="log"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
