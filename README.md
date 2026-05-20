@@ -1,27 +1,88 @@
-# ESP32-FingersUP
+# FingersUP - Akilli Ev Sistemi
 
-A small project that uses a PC webcam and OpenCV-based hand-gesture detection to send 5-bit gesture messages over MQTT to an ESP microcontroller that controls LEDs.
+Kamera ile yuz tanima + iki el hareket algilama ile kontrol edilen, MQTT tabanli akilli ev sistemi.
 
-## Overview
+## Mimari
 
-The publisher runs on a PC (Python + OpenCV). It detects which fingers are up and publishes a 5-character string such as `01010` to an MQTT topic. An ESP8266/ESP32 subscriber listens to the topic and toggles five LEDs according to the received bits.
+```
+                    ┌─────────────────────────┐
+                    │   Multi Kamera (PC)     │
+                    │  Yuz Tanima + El Takibi │
+                    └─────────┬───────────────┘
+                              │ MQTT
+                    ┌────────▼───────────────┐
+                    │    ESP8266             │
+                    │  - MQTT subscriber     │
+                    │  - 7-Segment Display   │
+                    │  - UART -> Arduino     │
+                    └────────┬───────────────┘
+                              │ UART
+                    ┌────────▼───────────────┐
+                    │    Arduino             │
+                    │  - LCD 16x2            │
+                    │  - LED'ler (K,Y,M)     │
+                    │  - Servo Motor         │
+                    │  - HC-SR04 (Mesafe)    │
+                    │  - Sicaklik Sensoru    │
+                    │  - IR Modul            │
+                    │  - LDR (Isik)          │
+                    │  - Buzzer              │
+                    └────────────────────────┘
 
-## Features
+    Web Uygulamasi (Tarayici)
+         │ MQTT WebSocket
+         └─────────────┘
+```
 
-- Detects five fingers and encodes their state as a 5-bit string (thumb..pinky).
-- Publishes changes only (reduces MQTT chatter).
-- Simple Arduino/ESP sketch included to subscribe and control GPIO pins.
+## Ozellikler
 
-## Requirements
+- **Yuz Tanima**: Sadece taninan kullanicinin el komutlari calisir
+- **Cift El**: Sag el menulerde gezinme, sol el analog deger kontrolu
+- **Menu Sistemi**: Yumruk ile menu ac/kapa, parmaklarla 5 ana menu + alt komutlar
+- **Multi Kamera**: Ayni anda birden fazla kamera destegi
+- **Web Dashboard**: Tarayicidan izleme ve kontrol
+- **IR Alternatif**: Uzaktan kumanda ile yedek kontrol
+
+## Menu Yapisi
+
+```
+Yumruk -> Menuyu Ac/Kapat
+
+1. ISIKLAR
+   1. Kirmizi LED Ac/Kapa
+   2. Yesil LED Ac/Kapa
+   3. Mavi LED Ac/Kapa
+   4. Oda Isigi Durumu (LDR)
+
+2. SICAKLIK
+   1. Olcum Al
+   2. Alarm Siniri Belirle
+
+3. GUVENLiK
+   1. Kapi Durumu (HC-SR04)
+   2. Alarm Ac/Kapa
+   3. Buzzer Test
+
+4. PERDE/SERVO
+   1. Ac (0°)
+   2. Kapat (180°)
+   3-5. Belirli Acilar
+
+5. SiSTEM
+   1. Tum Durum
+   2. Segment Test
+   3. Yeniden Baslat
+```
+
+## Gereksinimler
 
 - Python 3.8+
-- A webcam (or other camera accessible by OpenCV)
-- An ESP8266 or ESP32 board with WiFi
-- MQTT broker (public example: `broker.emqx.io`) or your own broker
+- Web kamera(lar)
+- ESP8266 veya ESP32 (WiFi + MQTT)
+- Arduino (Uno/Nano/Mega)
+- MQTT Broker (varsayilan: `broker.emqx.io`)
 
-## Python dependencies
-
-Install dependencies in a virtual environment:
+## Python Bagimliliklari
 
 ```bash
 python -m venv .venv
@@ -29,43 +90,41 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-## Quick start (publisher)
+## Yuz Tanima Kayit
 
-1. Adjust broker/topic if needed in `Publisher.py` or call the package programmatically.
-2. Run the publisher (this opens the webcam window):
+1. `assets/known_faces/` klasorune .jpg dosyasi koyun (dosya adi = kisi adi)
+2. Veya calisma aninda `r` tusuna basarak kayit yapin
+
+## Hizli Baslangic
 
 ```bash
 python Publisher.py
 ```
 
-Press `q` to quit.
-
-Output example published to MQTT:
+## Proje Yapisi
 
 ```
-Publish Message: 01010
+├── Publisher.py              # Giris noktasi
+├── publisher/                # Python paketi
+│   ├── main.py              # Ana dongu
+│   ├── config.py            # Yapilandirma
+│   ├── camera_manager.py    # Multi-kamera yoneticisi
+│   ├── face_recognizer.py   # Yuz tanima
+│   ├── hand_detector.py     # El hareket algilama
+│   ├── gesture_processor.py # Menu sistemi
+│   └── mqtt_client.py       # MQTT iletisim
+├── ESP_Subscriber/           # ESP8266 kodu
+├── Arduino_Controller/       # Arduino kodu
+├── web_app/                  # Web dashboard
+│   ├── index.html
+│   ├── style.css
+│   └── app.js
+├── assets/
+│   ├── known_faces/         # Kayitli yuzler
+│   └── wiring.md            # Kablaj semasi
+└── requirements.txt
 ```
 
-## Quick start (ESP subscriber)
+## Lisans
 
-- The Arduino sketch is at `ESP8266_Subscriber/ESP32-Subscriber/ESP32-Subscriber.ino`.
-- Update `ssid`, `password` and (optionally) the MQTT topic in the sketch before uploading.
-- The sketch expects a 5-character payload and writes each character to a configured GPIO pin.
-
-## Project structure
-
-- `Publisher.py` — thin wrapper that calls the modular `publisher` package
-- `publisher/` — modular code (camera, detector, mqtt client, main)
-- `ESP8266_Subscriber/` — Arduino sketch for the ESP
-- `requirements.txt` — Python dependencies
-- `Wiring ESP32.jpg` — wiring reference image (can be moved to `docs/`)
-
-## Notes and suggestions
-
-- The repo currently contains a compiled bytecode file in `publisher/__pycache__` — add a `.gitignore` and remove `__pycache__` from version control.
-- If you use your own MQTT broker, update `publisher/mqtt_client.py` or pass broker/topic to `publisher.main.run()`.
-
-## License
-
-This project includes a `LICENSE` file. Check it for reuse terms.
-
+Bu proje bir `LICENSE` dosyasi icerir.
