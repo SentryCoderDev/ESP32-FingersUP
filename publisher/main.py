@@ -1,40 +1,46 @@
-import cv2
-from .camera import Camera
-from .detector import Detector
+import signal
+import sys
 from .mqtt_client import MQTTClient
+from .camera_manager import CameraManager
+from .config import CAMERA_IDS
 
 
-def run(broker='broker.emqx.io', topic='Sentry', src=0):
-    cam = Camera(src)
-    det = Detector()
-    mqttc = MQTTClient(broker, 1883, topic)
-    lastData = "00000"
+def run(camera_ids=None):
+    mqtt = MQTTClient()
+    cam_ids = camera_ids if camera_ids is not None else CAMERA_IDS
 
-    while cam.is_opened():
-        success, img = cam.read()
-        if not success:
-            break
+    # Filter out non-existent cameras
+    import cv2
+    available = []
+    for cid in cam_ids:
+        cap = cv2.VideoCapture(cid)
+        if cap.isOpened():
+            cap.release()
+            available.append(cid)
+        else:
+            cap.release()
+            print(f"Kamera {cid} mevcut degil, atlaniyor")
 
-        hands, img = det.find(img)
-        fingerVal, lmList = det.calc_finger_values(hands)
+    if not available:
+        print("Hicbir kamera bulunamadi!")
+        mqtt.stop()
+        return
 
-        if lmList:
-            img = det.draw_marks(img, lmList, fingerVal)
+    print(f"FingersUP Akilli Ev Sistemi Baslatiliyor...")
+    print(f"Aktif Kameralar: {available}")
 
-            strVal = ''.join(map(str, fingerVal))
-            if lastData != strVal:
-                mqttc.publish(strVal)
-                print(f'Publish Message: {strVal}')
-                lastData = strVal
+    manager = CameraManager(mqtt, available)
 
-        cam.show("Image", img)
-        key = cam.wait_key(1)
-        if key == ord('q'):
-            break
+    def signal_handler(sig, frame):
+        print("\nKapatiliyor...")
+        manager.stop()
+        mqtt.stop()
+        sys.exit(0)
 
-    cam.release()
-    cam.destroy()
-    mqttc.stop()
+    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGTERM, signal_handler)
+
+    manager.start()
 
 
 if __name__ == '__main__':
